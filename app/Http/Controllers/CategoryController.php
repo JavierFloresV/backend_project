@@ -19,6 +19,12 @@ class CategoryController extends Controller
         return view("category.index", $data);
     }
 
+    public function list()
+    {
+        $data = Category::all();
+        return response()->json($data, 202);
+    }
+
     public function search(Request $request)
     {
         //$data = $request->all();
@@ -52,9 +58,19 @@ class CategoryController extends Controller
         //$data = $request->all();
         $data = $request->except('_token');
         Category::insert($data);
-        Session::flash('alert-success', 'Se ha Creado la Categorías con éxito!');
+        Session::flash('alert-success', "Se ha Creado la Categorías con éxito! {$data['name']}");
         return redirect()->route("category.index");
     }
+
+    public function save(Request $request)
+    {
+        $category = new Category;
+        $category->name = $request->name;
+        $category->description = $request->description;
+        $category->save();
+        return response()->json("la informacion se guador con exito", 201);
+    }
+
 
     /**
      * Display the specified resource.
